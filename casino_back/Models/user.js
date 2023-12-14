@@ -13,5 +13,9 @@ const userSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    room: {
+        type: Schema.ObjectId,
+        ref: 'Room',
+    },
 });
 export default model('User', userSchema);

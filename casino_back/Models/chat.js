@@ -10,6 +10,10 @@ const chatSchema = new Schema(
             },
             name: String,
         },
+        room: {
+            type: Schema.ObjectId,
+            ref: 'Room',
+        },
     },
     { timestamp: true },
 );
