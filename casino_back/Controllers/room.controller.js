@@ -28,6 +28,11 @@ export const joinRoom = async (roomId, user) => {
     }
     if (!room.members.includes(user._id)) {
         room.members.push(user._id);
+
+        if (room.admin.length === 0) {
+            room.admin.push(user._id);
+        }
+
         await room.save();
     }
     user.room = roomId;

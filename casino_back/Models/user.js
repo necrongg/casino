@@ -9,6 +9,10 @@ const userSchema = new Schema({
     token: {
         type: String,
     },
+    point: {
+        type: Number,
+        default: 0,
+    },
     online: {
         type: Boolean,
         default: false,

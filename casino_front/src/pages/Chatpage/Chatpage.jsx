@@ -45,17 +45,15 @@ const ChatPage = ({ user }) => {
     };
 
     return (
-        <div>
-            <div className='App'>
-                <nav>
-                    <Button onClick={leaveRoom} className='back-button'>
-                        ←
-                    </Button>
-                    <div className='nav-user'>{user.name}</div>
-                </nav>
-                <div>{messageList.length > 0 ? <MessageContainer messageList={messageList} user={user} /> : null}</div>
-                <InputField message={message} setMessage={setMessage} sendMessage={sendMessage} />
-            </div>
+        <div className='App'>
+            <nav>
+                <Button onClick={leaveRoom} className='back-button'>
+                    ←
+                </Button>
+                <div className='nav-user'>{user.name}</div>
+            </nav>
+            <div>{messageList.length > 0 ? <MessageContainer messageList={messageList} user={user} /> : null}</div>
+            <InputField message={message} setMessage={setMessage} sendMessage={sendMessage} />
         </div>
     );
 };

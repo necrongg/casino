@@ -14,6 +14,13 @@ const roomSchema = new Schema(
             default: true,
         },
 
+        admin: [
+            {
+                type: Schema.ObjectId,
+                ref: 'User',
+            },
+        ],
+
         members: [
             {
                 type: Schema.ObjectId,
