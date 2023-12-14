@@ -6,7 +6,22 @@ export const getAllRooms = async () => {
     return roomList;
 };
 
+export const createRoom = async (roomName) => {
+    try {
+        const newRoom = new Room({
+            room: roomName,
+            members: [],
+        });
+
+        const savedRoom = await newRoom.save();
+        return savedRoom;
+    } catch (error) {
+        throw new Error('방 생성에 실패했습니다: ' + error.message);
+    }
+};
+
 export const joinRoom = async (roomId, user) => {
+    // 방 입장
     const room = await Room.findById(roomId);
     if (!room) {
         throw new Error('해당 방이 없습니다.');
@@ -20,10 +35,12 @@ export const joinRoom = async (roomId, user) => {
 };
 
 export const leaveRoom = async (user) => {
+    // 방 퇴장
     const room = await Room.findById(user.room);
     if (!room) {
         throw new Error('Room not found');
     }
+
     room.members.remove(user._id);
     await room.save();
 };

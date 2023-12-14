@@ -10,17 +10,17 @@ import { Button } from '@mui/base/Button';
 const ChatPage = ({ user }) => {
     const [messageList, setMessageList] = useState([]);
     const [message, setMessage] = useState('');
-    const { id } = useParams(); // 유저가 조인한 방의 아이디를 url에서 가져온다.
+    const { id: rid } = useParams();
     const navigate = useNavigate();
 
     const leaveRoom = () => {
-        socket.emit('leaveRoom', user, (res) => {
-            if (res.ok) navigate('/'); // 다시 채팅방 리스트 페이지로 돌아감
+        socket.emit('leaveRoom', (res) => {
+            if (res.ok) navigate('/');
         });
     };
 
     useEffect(() => {
-        socket.emit('joinRoom', id, (res) => {
+        socket.emit('joinRoom', rid, (res) => {
             if (res && res.ok) {
                 console.log('successfully join', res);
             } else {
@@ -32,7 +32,7 @@ const ChatPage = ({ user }) => {
             console.log('message', res);
             setMessageList((prevState) => prevState.concat(res));
         });
-    }, [id]);
+    }, [rid]);
 
     const sendMessage = (event) => {
         event.preventDefault();

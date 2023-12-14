@@ -1,4 +1,3 @@
-import { Socket } from 'socket.io';
 import User from '../Models/user.js';
 
 export const saveUser = async (userName, sid) => {
