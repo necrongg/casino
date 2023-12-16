@@ -47,5 +47,11 @@ export const leaveRoom = async (user) => {
     }
 
     room.members.remove(user._id);
+
     await room.save();
+
+    // 마지막 인원이 나가면 방 삭제
+    if (room.members.length === 0) {
+        await Room.deleteOne({ _id: room._id });
+    }
 };
