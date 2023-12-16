@@ -1,8 +1,21 @@
-import './MessageContainer.css';
+import { useEffect, useRef } from 'react';
+import './MessageContainer.scss';
 
 const MessageContainer = ({ messageList, user }) => {
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messageList]);
+
     return (
-        <div>
+        <div className='message-container-box'>
             {messageList.map((message, index) => {
                 return (
                     <div key={index} className='message-container'>
@@ -32,6 +45,7 @@ const MessageContainer = ({ messageList, user }) => {
                                 <div className='your-message'>{message.chat}</div>
                             </div>
                         )}
+                        <div ref={messagesEndRef} />
                     </div>
                 );
             })}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input } from '@mui/base/Input';
 import { Button } from '@mui/base/Button';
-import './InputField.css';
+import './InputField.scss';
 
 const InputField = ({ message, setMessage, sendMessage }) => {
     return (

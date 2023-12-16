@@ -1,11 +1,10 @@
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import socket from '../../server';
 import MessageContainer from '../../components/MessageContainer/MessageContainer';
 import InputField from '../../components/InputField/InputField';
-import './Chatpage.css';
 import { Button } from '@mui/base/Button';
+import './Chatpage.scss';
 
 const ChatPage = ({ user }) => {
     const [messageList, setMessageList] = useState([]);
@@ -45,15 +44,18 @@ const ChatPage = ({ user }) => {
     };
 
     return (
-        <div className='App'>
+        <div className='game-room'>
             <nav>
                 <Button onClick={leaveRoom} className='back-button'>
                     ←
                 </Button>
                 <div className='nav-user'>{user.name}</div>
             </nav>
-            <div>{messageList.length > 0 ? <MessageContainer messageList={messageList} user={user} /> : null}</div>
-            <InputField message={message} setMessage={setMessage} sendMessage={sendMessage} />
+            <div className='game-table'></div>
+            <div className='message-box'>
+                {messageList.length > 0 ? <MessageContainer messageList={messageList} user={user} /> : null}
+                <InputField message={message} setMessage={setMessage} sendMessage={sendMessage} />
+            </div>
         </div>
     );
 };
