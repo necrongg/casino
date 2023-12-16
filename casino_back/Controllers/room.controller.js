@@ -6,10 +6,13 @@ export const getAllRooms = async () => {
     return roomList;
 };
 
-export const createRoom = async (roomName) => {
+export const createRoom = async (roomData) => {
     try {
         const newRoom = new Room({
-            room: roomName,
+            room: roomData.roomName,
+            password: roomData.password,
+            game_type: roomData.gameType,
+            limit_person: roomData.limitPerson,
             members: [],
         });
 

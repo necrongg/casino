@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './App.css';
+
 import RoomListPage from './pages/RoomListPage/RoomListPage';
 import ChatPage from './pages/Chatpage/Chatpage';
 import socket from './server';
-import './App.css';
 
 function App() {
     const [user, setUser] = useState(null);
@@ -19,7 +22,6 @@ function App() {
 
     const askuserName = () => {
         const userName = prompt('아이디를 입력하세요');
-        console.log('userName', userName);
 
         socket.emit('login', userName, (res) => {
             console.log('login', res);
@@ -30,10 +32,25 @@ function App() {
     };
 
     return (
-        <Routes>
-            <Route exact path='/' element={<RoomListPage rooms={rooms} />} />
-            <Route exact path='/room/:id' element={<ChatPage user={user} />} />
-        </Routes>
+        <>
+            <ToastContainer
+                position='top-right'
+                autoClose={2500}
+                limit={5}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme='colored'
+            />
+            <Routes>
+                <Route exact path='/' element={<RoomListPage rooms={rooms} />} />
+                <Route exact path='/room/:id' element={<ChatPage user={user} />} />
+            </Routes>
+        </>
     );
 }
 

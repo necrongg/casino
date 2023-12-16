@@ -16,9 +16,9 @@ export default function setupIO(io) {
     io.on('connection', async (socket) => {
         socket.emit('rooms', await getAllRooms());
 
-        socket.on('createRoom', async (roomName, cb) => {
+        socket.on('createRoom', async (roomData, cb) => {
             try {
-                const newRoom = await createRoom(roomName);
+                const newRoom = await createRoom(roomData);
 
                 cb({ ok: true, room: newRoom });
             } catch (error) {

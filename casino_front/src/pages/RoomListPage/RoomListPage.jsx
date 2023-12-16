@@ -1,14 +1,45 @@
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import './RoomListPage.css';
 import socket from '../../server.js';
 
-const RoomListPage = ({ rooms }) => {
-    const createNewRoom = async () => {
-        const roomName = prompt('방 이름을 입력하세요.');
+import { useState } from 'react';
 
-        if (roomName) {
-            // 유저가 취소하지 않고 방 이름을 입력한 경우에만 실행
-            socket.emit('createRoom', roomName, (res) => {
+const RoomListPage = ({ rooms }) => {
+    const [showPopup, setShowPopup] = useState(false);
+    const [roomData, setRoomData] = useState({
+        roomName: '',
+        password: '',
+        gameType: 'black_jack',
+        limitPerson: 2,
+    });
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setRoomData({ ...roomData, [name]: value });
+    };
+
+    const handleLimitPersonChange = (e) => {
+        const limit = parseInt(e.target.value);
+        setRoomData({ ...roomData, limitPerson: limit });
+    };
+
+    const handleGameTypeChange = (e) => {
+        const gameType = e.target.value;
+        setRoomData({ ...roomData, gameType }); // 게임 타입 변경
+    };
+
+    const handleSubmit = () => {
+        if (roomData.roomName.trim() !== '') {
+            createNewRoom(roomData);
+        } else {
+            toast.error('방 이름을 입력해주세요');
+        }
+    };
+
+    const createNewRoom = async () => {
+        if (roomData) {
+            socket.emit('createRoom', roomData, (res) => {
                 if (res.ok) {
                     console.log('방이 성공적으로 생성되었습니다.');
                     navigate(`/room/${res.room._id}`);
@@ -23,6 +54,10 @@ const RoomListPage = ({ rooms }) => {
 
     const moveToChat = (rid) => {
         navigate(`/room/${rid}`);
+    };
+
+    const togglePopup = () => {
+        setShowPopup(!showPopup);
     };
 
     return (
@@ -41,7 +76,52 @@ const RoomListPage = ({ rooms }) => {
                   ))
                 : null}
 
-            <button onClick={createNewRoom}>방 생성</button>
+            <button onClick={togglePopup}>방 생성</button>
+
+            {showPopup && (
+                <div className='popup'>
+                    <h2>방 정보 입력</h2>
+                    <input
+                        type='text'
+                        name='roomName'
+                        placeholder='방 이름을 입력하세요'
+                        onChange={handleInputChange}
+                    />
+                    <input
+                        type='text'
+                        name='password'
+                        placeholder='비밀번호를 입력하세요'
+                        onChange={handleInputChange}
+                    />
+                    <select name='limitPerson' onChange={handleLimitPersonChange}>
+                        {[2, 3, 4, 5, 6, 7, 8].map((num) => (
+                            <option key={num} value={num}>
+                                {num}명
+                            </option>
+                        ))}
+                    </select>
+
+                    <label>
+                        <input
+                            type='radio'
+                            name='gameType'
+                            value='black_jack'
+                            onChange={handleGameTypeChange}
+                            defaultChecked
+                        />
+                        블랙잭
+                    </label>
+                    <label>
+                        <input type='radio' name='gameType' value='poker' onChange={handleGameTypeChange} />
+                        포커
+                    </label>
+                    <label>
+                        <input type='radio' name='gameType' value='texas_hold_em' onChange={handleGameTypeChange} />
+                        텍사스홀덤
+                    </label>
+                    <button onClick={handleSubmit}>방 생성</button>
+                </div>
+            )}
         </div>
     );
 };
