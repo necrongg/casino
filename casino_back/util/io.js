@@ -1,6 +1,6 @@
-import { saveChat } from '../Controllers/chat.controller.js';
-import { createRoom, getAllRooms, joinRoom, leaveRoom, getRoom } from '../Controllers/room.controller.js';
-import { checkUser, saveUser } from '../Controllers/user.controller.js';
+import { saveChat } from '../Controllers/chat/chat.controller.js';
+import { createRoom, getAllRooms, joinRoom, leaveRoom, getRoom } from '../Controllers/chat/room.controller.js';
+import { checkUser, saveUser } from '../Controllers/chat/user.controller.js';
 
 export default function setupIO(io) {
     async function sendLeaveMessage(user, socket, io) {

@@ -1,4 +1,4 @@
-import User from '../Models/user.js';
+import User from '../../Models/user.js';
 
 export const saveUser = async (userName, sid) => {
     let user = await User.findOne({ name: userName });

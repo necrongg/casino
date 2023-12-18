@@ -2,7 +2,8 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import app from './app.js';
-import  setupIO  from './util/io.js';
+import setupIO from './util/io.js';
+import gameIO from './util/game.io.js';
 
 dotenv.config();
 
@@ -18,3 +19,4 @@ httpServer.listen(process.env.PORT, () => {
 });
 
 setupIO(io);
+gameIO(io);
