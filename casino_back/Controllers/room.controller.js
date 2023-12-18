@@ -6,6 +6,12 @@ export const getAllRooms = async () => {
     return roomList;
 };
 
+export const getRoom = async (rid) => {
+    const room = await Room.findById(rid);
+
+    return room;
+};
+
 export const createRoom = async (roomData) => {
     try {
         const newRoom = new Room({
@@ -42,6 +48,7 @@ export const joinRoom = async (roomId, user) => {
         await room.save();
     }
     user.room = roomId;
+
     await user.save();
 };
 

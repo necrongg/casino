@@ -1,5 +1,5 @@
 import { saveChat } from '../Controllers/chat.controller.js';
-import { createRoom, getAllRooms, joinRoom, leaveRoom } from '../Controllers/room.controller.js';
+import { createRoom, getAllRooms, joinRoom, leaveRoom, getRoom } from '../Controllers/room.controller.js';
 import { checkUser, saveUser } from '../Controllers/user.controller.js';
 
 export default function setupIO(io) {
@@ -38,6 +38,8 @@ export default function setupIO(io) {
                 };
 
                 io.to(user.room.toString()).emit('message', welcomeMessage);
+                io.to(user.room.toString()).emit('roomInfo', await getRoom(rid));
+
                 io.emit('rooms', await getAllRooms());
 
                 cb({ ok: true });

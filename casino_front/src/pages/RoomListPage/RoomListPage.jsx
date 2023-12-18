@@ -1,9 +1,8 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './RoomListPage.css';
 import socket from '../../server.js';
-
-import { useState } from 'react';
 
 const RoomListPage = ({ rooms }) => {
     const [showPopup, setShowPopup] = useState(false);
@@ -41,10 +40,9 @@ const RoomListPage = ({ rooms }) => {
         if (roomData) {
             socket.emit('createRoom', roomData, (res) => {
                 if (res.ok) {
-                    console.log('방이 성공적으로 생성되었습니다.');
                     navigate(`/room/${res.room._id}`);
                 } else {
-                    console.error('방 생성에 실패했습니다:', res.error);
+                    toast.error('방 생성에 실패했습니다:', res.error);
                 }
             });
         }
@@ -52,10 +50,14 @@ const RoomListPage = ({ rooms }) => {
 
     const navigate = useNavigate();
 
-    const moveToChat = (rid) => {
+    const moveToChat = (rid, limit, members) => {
+        if (limit <= members.length) {
+            toast.error('더 이상 입장할 수 없습니다.');
+            return;
+        }
+
         navigate(`/room/${rid}`);
     };
-
     const togglePopup = () => {
         setShowPopup(!showPopup);
     };
@@ -66,12 +68,18 @@ const RoomListPage = ({ rooms }) => {
 
             {rooms.length > 0
                 ? rooms.map((room, index) => (
-                      <div className='room-list' key={index} onClick={() => moveToChat(room._id)}>
+                      <div
+                          className='room-list'
+                          key={index}
+                          onClick={() => moveToChat(room._id, room.limit_person, room.members)}
+                      >
                           <div className='room-title'>
                               <img src='/profile.jpeg' alt='profile' />
                               <p>{room.room}</p>
                           </div>
-                          <div className='member-number'>{room.members.length}</div>
+                          <div className='member-number'>
+                              {room.members.length}/{room.limit_person}
+                          </div>
                       </div>
                   ))
                 : null}
