@@ -32,6 +32,9 @@ export const joinRoom = async (roomId, user) => {
     if (!room.members.includes(user._id)) {
         room.members.push(user._id);
 
+        const userIndex = room.members.indexOf(user._id);
+        user.seatNumber = userIndex;
+
         if (room.admin.length === 0) {
             room.admin.push(user._id);
         }
@@ -50,7 +53,9 @@ export const leaveRoom = async (user) => {
     }
 
     room.members.remove(user._id);
+    user.seatNumber = null;
 
+    await user.save();
     await room.save();
 
     // 마지막 인원이 나가면 방 삭제

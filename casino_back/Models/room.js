@@ -7,6 +7,11 @@ const roomSchema = new Schema(
         game_type: String,
         limit_person: Number,
 
+        isPublic: {
+            type: Boolean,
+            default: true,
+        },
+
         admin: [
             {
                 type: Schema.ObjectId,
