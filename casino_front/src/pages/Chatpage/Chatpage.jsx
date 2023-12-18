@@ -5,6 +5,7 @@ import MessageContainer from '../../components/MessageContainer/MessageContainer
 import InputField from '../../components/InputField/InputField';
 import { Button } from '@mui/base/Button';
 import './Chatpage.scss';
+import BlackjackGame from '../../components/BlackJack/BlackJack';
 
 const ChatPage = ({ user }) => {
     const [messageList, setMessageList] = useState([]);
@@ -51,7 +52,9 @@ const ChatPage = ({ user }) => {
                 </Button>
                 <div className='nav-user'>{user.name}</div>
             </nav>
-            <div className='game-table'></div>
+            <div className='game-table'>
+                <BlackjackGame />
+            </div>
             <div className='message-box'>
                 {messageList.length > 0 ? <MessageContainer messageList={messageList} user={user} /> : null}
                 <InputField message={message} setMessage={setMessage} sendMessage={sendMessage} />

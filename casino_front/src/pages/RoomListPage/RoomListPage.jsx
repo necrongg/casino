@@ -26,7 +26,7 @@ const RoomListPage = ({ rooms }) => {
 
     const handleGameTypeChange = (e) => {
         const gameType = e.target.value;
-        setRoomData({ ...roomData, gameType }); // 게임 타입 변경
+        setRoomData({ ...roomData, gameType });
     };
 
     const handleSubmit = () => {

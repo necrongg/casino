@@ -39,6 +39,7 @@ export default function setupIO(io) {
 
                 io.to(user.room.toString()).emit('message', welcomeMessage);
                 io.emit('rooms', await getAllRooms());
+
                 cb({ ok: true });
             } catch (error) {
                 cb({ ok: false, error: error.message });
