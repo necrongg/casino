@@ -8,7 +8,6 @@ export default function BlackjackGame() {
     useEffect(() => {
         socket.on('cardData', (data) => {
             setDeck(data.cards);
-            // console.log(deck);
         });
     }, []);
 
@@ -24,6 +23,12 @@ export default function BlackjackGame() {
     return (
         <div className='blackjack-game'>
             <button onClick={() => startGame()}>start Game</button>
+            {deck.map((card, index) => (
+                <span key={index}>
+                    [{card.suit}
+                    {card.rank}]
+                </span>
+            ))}
         </div>
     );
 }
