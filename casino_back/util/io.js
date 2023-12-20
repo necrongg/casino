@@ -38,7 +38,7 @@ export default function setupIO(io) {
                 };
 
                 io.to(user.room.toString()).emit('message', welcomeMessage);
-                io.to(user.room.toString()).emit('roomInfo', await getRoom(rid));
+                io.to(user.room.toString()).emit('roomInfo', await getRoom(user.room));
 
                 io.emit('rooms', await getAllRooms());
 
@@ -53,6 +53,8 @@ export default function setupIO(io) {
                 const user = await checkUser(socket.id);
                 await leaveRoom(user);
                 await sendLeaveMessage(user, socket, io);
+
+                io.to(user.room.toString()).emit('roomInfo', await getRoom(user.room));
 
                 cb({ ok: true });
             } catch (error) {
@@ -85,8 +87,11 @@ export default function setupIO(io) {
         socket.on('disconnect', async () => {
             try {
                 const user = await checkUser(socket.id);
+
                 await leaveRoom(user);
                 await sendLeaveMessage(user, socket, io);
+
+                io.to(user.room.toString()).emit('roomInfo', await getRoom(user.room));
             } catch (error) {
                 console.error(error);
             }
