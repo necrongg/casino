@@ -10,7 +10,7 @@ import BlackjackGame from '../../components/BlackJack/BlackJack';
 const ChatPage = ({ user }) => {
     const [messageList, setMessageList] = useState([]);
     const [message, setMessage] = useState('');
-    const [room, setRoom] = useState([]);
+    const [roomInfo, setRoomInfo] = useState([]);
     const { id: rid } = useParams();
     const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ const ChatPage = ({ user }) => {
 
         socket.on('roomInfo', (res) => {
             console.log('roomInfo', res);
-            setRoom(res);
+            setRoomInfo(res);
         });
     }, [rid]);
 
@@ -57,7 +57,7 @@ const ChatPage = ({ user }) => {
                     ←
                 </Button>
                 <div className='nav-user'>{user.name}</div>
-                <div className='nav-user'>{room && room.members && room.members.length}</div>
+                <div className='nav-user'>{roomInfo && roomInfo.members && roomInfo.members.length}</div>
             </nav>
             <div className='game-table'>
                 <BlackjackGame />
