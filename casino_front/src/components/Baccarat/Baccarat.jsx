@@ -1,32 +1,28 @@
 import { useEffect, useState } from 'react';
 import socket from '../../server.js';
 
-export default function BlackjackGame() {
+export default function Baccarat() {
     const NumberOfDeck = 6; // 카드 덱 수량
     const [deck, setDeck] = useState([]);
     const [dealerCards, setDealerCards] = useState([]);
+    const [dealerScore, setDealerScore] = useState(0);
     const [playerCards, setPlayerCards] = useState([]);
+    const [playerScore, setPlayerScore] = useState(0);
 
     useEffect(() => {
         socket.on('cardData', (data) => {
             setDeck(data.cards);
         });
-    }, []);
 
-    useEffect(() => {
-        // 딜러와 플레이어의 카드 정보를 수신
         socket.on('dealerCards', (data) => {
             setDealerCards(data.cards);
+            setDealerScore(data.score);
         });
 
         socket.on('playerCards', (data) => {
             setPlayerCards(data.cards);
+            setPlayerScore(data.score);
         });
-
-        return () => {
-            socket.off('dealerCards');
-            socket.off('playerCards');
-        };
     }, []);
 
     // 게임 시작
@@ -42,25 +38,26 @@ export default function BlackjackGame() {
         <div className='blackjack-game'>
             <button onClick={() => startGame()}>start Game</button>
 
-            {/* 딜러의 카드 정보를 화면에 출력 */}
             <div className='dealer-cards'>
+                딜러카드
                 {dealerCards.map((card, index) => (
                     <span key={index}>
                         [{card.suit} {card.rank}]
                     </span>
                 ))}
+                {dealerScore}
             </div>
 
-            {/* 플레이어의 카드 정보를 화면에 출력 */}
             <div className='player-cards'>
+                플레이어카드
                 {playerCards.map((card, index) => (
                     <span key={index}>
                         [{card.suit} {card.rank}]
                     </span>
                 ))}
+                {playerScore}
             </div>
 
-            {/* 전체 덱의 카드 정보를 화면에 출력 */}
             {deck.map((card, index) => (
                 <span key={index}>
                     [{index} {card.suit} {card.rank}]

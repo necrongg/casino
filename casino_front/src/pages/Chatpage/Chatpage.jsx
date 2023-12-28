@@ -5,7 +5,7 @@ import MessageContainer from '../../components/MessageContainer/MessageContainer
 import InputField from '../../components/InputField/InputField';
 import { Button } from '@mui/base/Button';
 import './Chatpage.scss';
-import BlackjackGame from '../../components/BlackJack/BlackJack';
+import Baccarat from '../../components/Baccarat/Baccarat';
 
 const ChatPage = ({ user }) => {
     const [messageList, setMessageList] = useState([]);
@@ -60,7 +60,7 @@ const ChatPage = ({ user }) => {
                 <div className='nav-user'>{roomInfo && roomInfo.members && roomInfo.members.length}</div>
             </nav>
             <div className='game-table'>
-                <BlackjackGame />
+                <Baccarat />
             </div>
             <div className='message-box'>
                 {messageList.length > 0 ? <MessageContainer messageList={messageList} user={user} /> : null}
