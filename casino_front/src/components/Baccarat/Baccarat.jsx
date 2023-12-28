@@ -2,26 +2,35 @@ import { useEffect, useState } from 'react';
 import socket from '../../server.js';
 
 export default function Baccarat() {
-    const NumberOfDeck = 6; // 카드 덱 수량
-    const [deck, setDeck] = useState([]);
-    const [dealerCards, setDealerCards] = useState([]);
-    const [dealerScore, setDealerScore] = useState(0);
+    const NumberOfDeck = 8; // 카드 덱 수량
+    const [cards, setCards] = useState([]);
+    const [usedCards, setUsedCards] = useState([]);
+    const [bankerCards, setBankerCards] = useState([]);
+    const [bankerScore, setBankerScore] = useState(0);
     const [playerCards, setPlayerCards] = useState([]);
     const [playerScore, setPlayerScore] = useState(0);
+    const [result, setResult] = useState('');
 
     useEffect(() => {
-        socket.on('cardData', (data) => {
-            setDeck(data.cards);
+        socket.on('cards', (data) => {
+            setCards(data.cards);
+        });
+        socket.on('usedCards', (data) => {
+            setUsedCards(data.cards);
         });
 
-        socket.on('dealerCards', (data) => {
-            setDealerCards(data.cards);
-            setDealerScore(data.score);
+        socket.on('bankerCards', (data) => {
+            setBankerCards(data.cards);
+            setBankerScore(data.score);
         });
 
         socket.on('playerCards', (data) => {
             setPlayerCards(data.cards);
             setPlayerScore(data.score);
+        });
+
+        socket.on('gameEnd', (data) => {
+            setResult(data.result);
         });
     }, []);
 
@@ -34,18 +43,27 @@ export default function Baccarat() {
         });
     };
 
-    return (
-        <div className='blackjack-game'>
-            <button onClick={() => startGame()}>start Game</button>
+    const nextGame = () => {
+        socket.emit('nextGame', NumberOfDeck, (res) => {
+            if (res?.ok) {
+                console.log('nextGame ok');
+            }
+        });
+    };
 
-            <div className='dealer-cards'>
-                딜러카드
-                {dealerCards.map((card, index) => (
+    return (
+        <div className='baccarat-game'>
+            <button onClick={() => startGame()}>start Game</button>
+            <button onClick={() => nextGame()}>next Game</button>
+
+            <div className='banker-cards'>
+                뱅커카드
+                {bankerCards.map((card, index) => (
                     <span key={index}>
                         [{card.suit} {card.rank}]
                     </span>
                 ))}
-                {dealerScore}
+                {bankerScore}
             </div>
 
             <div className='player-cards'>
@@ -57,12 +75,9 @@ export default function Baccarat() {
                 ))}
                 {playerScore}
             </div>
-
-            {deck.map((card, index) => (
-                <span key={index}>
-                    [{index} {card.suit} {card.rank}]
-                </span>
-            ))}
+            <div>{result}</div>
+            <div>{cards}</div>
+            <div>{usedCards}</div>
         </div>
     );
 }
